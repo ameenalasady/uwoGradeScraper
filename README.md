@@ -11,4 +11,6 @@ pip install win10toast
 
 win10toast is not required if you do not wish to recieve windows 10 toast notifications when grades are updated. Delete its code and import function if you do not wish to use it.
 
-Run the program by running scraper.py
+Start by updating info.txt with the user's credentials, delay between checks, and how many courses the student has on their student center for the entire year.
+
+Run the program by running scraper.py.
