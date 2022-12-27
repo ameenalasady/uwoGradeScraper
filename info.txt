@@ -1,0 +1,7 @@
+userid:
+password:
+numberOfCourses(entire year):
+delay(s):
+
+#DO NOT USE SPACES
+#DO NOT DELETE ANY OF THE VARIABLE NAMES.
