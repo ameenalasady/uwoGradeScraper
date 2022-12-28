@@ -1,23 +1,33 @@
-def analyzeList(list, currentMarks):
-    from win10toast import ToastNotifier
+from datetime import datetime
+from actionWhenChange import action
+
+
+def analyzeList(list, currentMarks, n):
 
     for i in range(len(list)):
         if list[i] == '''\xa0>"''':
             list[i] = "N/A"
 
     f = open("logs.txt", "a")
-    print(list)
+    print(datetime.now().strftime("%d/%m/%Y %H:%M:%S"), list)
     f.write(str(list))
 
+    if list == ['', '', '', '', '', '', '', '', '', '', '', '']:
+        print("Timeout")
+        return currentMarks
+
     if currentMarks == []:
+        print("Grades available:", n-int(list.count("N/A")))
+        print("\n\n")
+        f.write("\n\n")
+        f.close()
         return list
 
     if list != currentMarks:
-        toaster = ToastNotifier()
-        toaster.show_toast(
-            "MARK UPDATE", "MARKS ARE OUTTTTTTTT", duration=1000)
+        action()
         print("Change detected!")
         f.write("Change detected!")
+        print("Grades available:", n-int(list.count("N/A")))
         print("\n\n")
         f.write("\n\n")
         f.close()
@@ -25,6 +35,7 @@ def analyzeList(list, currentMarks):
     else:
         print("No change detected.")
         f.write("No change detected.")
+        print("Grades available:", n-int(list.count("N/A")))
         print("\n\n")
         f.write("\n\n")
         f.close()

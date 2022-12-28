@@ -1,8 +1,9 @@
+from bs4 import BeautifulSoup
+from resultAnalyzer import analyzeList
+
+
 def htmlExtractor(htmldoc, n, currentMarks):
     marks = []
-    from bs4 import BeautifulSoup
-    import time
-    from resultAnalyzer import analyzeList
 
     soup = BeautifulSoup(htmldoc, "html.parser")
 
@@ -10,4 +11,4 @@ def htmlExtractor(htmldoc, n, currentMarks):
         lookFor = "WSA_ENROLMNT_CRSE_GRADE_OFF$"+str(i)
         marks.append(str(soup.find(id=lookFor))[-8:-11:-1])
 
-    return analyzeList(marks, currentMarks)
+    return analyzeList(marks, currentMarks, n)
