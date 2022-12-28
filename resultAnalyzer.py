@@ -12,7 +12,7 @@ def analyzeList(list, currentMarks, n):
     print(datetime.now().strftime("%d/%m/%Y %H:%M:%S"), list)
     f.write(str(list))
 
-    if list == ['', '', '', '', '', '', '', '', '', '', '', '']:
+    if list == ['']*n:
         print("Timeout")
         return currentMarks
 
