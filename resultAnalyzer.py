@@ -2,18 +2,27 @@ from datetime import datetime
 from actionWhenChange import action
 
 
-def analyzeList(list, currentMarks, n):
+def analyzeList(list, titles, currentMarks, n):
 
     for i in range(len(list)):
-        if list[i] == '''\xa0>"''':
+        if list[i] == '''\xa0''':
             list[i] = "N/A"
 
+    for i in range(len(titles)):
+        if "&amp;" in titles[i]:
+            titles[i] = titles[i].replace("&amp;", "&")
+
     f = open("logs.txt", "a")
-    print(datetime.now().strftime("%d/%m/%Y %H:%M:%S"), list)
+    print(datetime.now().strftime("%d/%m/%Y %H:%M:%S"))
+    for i in range(n):
+        print(titles[i], ":", list[i])
     f.write(str(list))
 
     if list == ['']*n:
         print("Timeout")
+        print("\n\n")
+        f.write("\n\n")
+        f.close()
         return currentMarks
 
     if currentMarks == []:
