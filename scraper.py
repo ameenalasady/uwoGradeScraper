@@ -1,6 +1,5 @@
 import requests
 import time
-from datetime import date
 from beautifulSoup import htmlExtractor
 
 

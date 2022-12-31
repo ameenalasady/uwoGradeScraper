@@ -1,8 +1,13 @@
 from datetime import datetime
 from actionWhenChange import action
+from colorama import init as colorama_init
+from colorama import Fore
+from colorama import Style
 
 
 def analyzeList(list, titles, currentMarks, n):
+
+    colorama_init()
 
     for i in range(len(list)):
         if list[i] == '''\xa0''':
@@ -15,7 +20,11 @@ def analyzeList(list, titles, currentMarks, n):
     f = open("logs.txt", "a")
     print(datetime.now().strftime("%d/%m/%Y %H:%M:%S"))
     for i in range(n):
-        print(titles[i], ":", list[i])
+        if list[i] != "N/A":
+            print(Fore.GREEN + str(titles[i]) +
+                  ' : ' + str(list[i])+Style.RESET_ALL)
+        else:
+            print(titles[i], ":", list[i])
     f.write(str(list))
 
     if list == ['']*n:
