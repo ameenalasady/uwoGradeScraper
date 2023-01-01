@@ -1,5 +1,5 @@
 from datetime import datetime
-from actionWhenChange import action
+from actionWhenChange import *
 from colorama import init as colorama_init
 from colorama import Fore
 from colorama import Style
@@ -43,6 +43,7 @@ def analyzeList(list, titles, currentMarks, n):
 
     if list != currentMarks:
         action()
+        sendMessage("Grades have been released")
         print("Change detected!")
         f.write("Change detected!")
         print("Grades available:", n-int(list.count("N/A")))
