@@ -12,6 +12,7 @@ A program that scrapes a student's grades from the university's student center (
   - Easily updated to include more actions
 
 Here is a screenshot of what the program looks like:
+
 ![Screenshot of my project](./images/Screenshot_1.png)
 
 ## Requirements
