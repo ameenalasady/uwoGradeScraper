@@ -1,5 +1,6 @@
 import requests
 import time
+import os
 from beautifulSoup import htmlExtractor
 
 
@@ -10,7 +11,19 @@ n = int(str(f.readline())[29::])
 delay = int(str(f.readline())[9::])
 f.close()
 
-currentMarks = []
+with open("logs.txt", "rb") as file:
+    try:
+        file.seek(-2, os.SEEK_END)
+        while file.read(1) != b'\n':
+            file.seek(-2, os.SEEK_CUR)
+    except:
+        file.seek(0)
+    lastline = file.readline().decode()
+
+currentMarks = lastline[1:-1].replace("'", '').replace(" ", "").split(",")
+
+if currentMarks == ['']:
+    currentMarks == []
 
 
 while (True):
@@ -28,9 +41,13 @@ while (True):
     }
 
     s = requests.Session()
-    response = s.post(loginURL, data=formData)
-    data = s.get(dataURL)
-    stringData = str(data.text)
+
+    try:
+        response = s.post(loginURL, data=formData)
+        data = s.get(dataURL)
+        stringData = str(data.text)
+    except:
+        stringData = ""
 
     currentMarks = htmlExtractor(stringData, n, currentMarks)
 

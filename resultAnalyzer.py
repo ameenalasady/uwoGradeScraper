@@ -25,37 +25,43 @@ def analyzeList(list, titles, currentMarks, n):
                   ' : ' + str(list[i])+Style.RESET_ALL)
         else:
             print(titles[i], ":", list[i])
+    f.write("\n")
     f.write(str(list))
+    f.close()
 
     if list == ['']*n:
         print("Timeout")
         print("\n\n")
-        f.write("\n\n")
-        f.close()
         return currentMarks
 
-    if currentMarks == []:
+    if currentMarks == [] or currentMarks == ['']:
         print("Grades available:", n-int(list.count("N/A")))
         print("\n\n")
-        f.write("\n\n")
-        f.close()
         return list
 
     if list != currentMarks:
+
         action()
-        sendMessage("Grades have been released")
+
+        indicesOfDifference = []
+        marksOfDifference = []
+        titlesofDifference = []
+
+        for i in range(len(list)):
+            if list[i] != currentMarks[i]:
+                indicesOfDifference.append(i)
+                marksOfDifference.append(list[i])
+                titlesofDifference.append(titles[i])
+
+        sendMessage("Ameen just got", str(marksOfDifference),
+                    str(titlesofDifference))
+
         print("Change detected!")
-        f.write("Change detected!")
         print("Grades available:", n-int(list.count("N/A")))
         print("\n\n")
-        f.write("\n\n")
-        f.close()
         return list
     else:
         print("No change detected.")
-        f.write("No change detected.")
         print("Grades available:", n-int(list.count("N/A")))
         print("\n\n")
-        f.write("\n\n")
-        f.close()
         return list
