@@ -5,7 +5,7 @@ from colorama import Fore
 from colorama import Style
 
 
-def analyzeList(list, titles, currentMarks, n):
+def analyzeList(list, titles, currentMarks, courses, didCoursesChange):
 
     colorama_init()
 
@@ -19,7 +19,7 @@ def analyzeList(list, titles, currentMarks, n):
 
     f = open("logs.txt", "a")
     print(datetime.now().strftime("%d/%m/%Y %H:%M:%S"))
-    for i in range(n):
+    for i in range(len(courses)):
         if list[i] != "N/A":
             print(Fore.GREEN + str(titles[i]) +
                   ' : ' + str(list[i])+Style.RESET_ALL)
@@ -29,17 +29,17 @@ def analyzeList(list, titles, currentMarks, n):
     f.write(str(list))
     f.close()
 
-    if list == ['']*n:
+    if list == ['']*len(courses):
         print("Timeout")
         print("\n\n")
         return currentMarks
 
     if currentMarks == [] or currentMarks == ['']:
-        print("Grades available:", n-int(list.count("N/A")))
+        print("Grades available:", len(courses)-int(list.count("N/A")))
         print("\n\n")
         return list
 
-    if list != currentMarks:
+    if list != currentMarks and didCoursesChange == False:
 
         action()
 
@@ -57,11 +57,11 @@ def analyzeList(list, titles, currentMarks, n):
                     str(titlesofDifference))
 
         print("Change detected!")
-        print("Grades available:", n-int(list.count("N/A")))
+        print("Grades available:", len(courses)-int(list.count("N/A")))
         print("\n\n")
         return list
     else:
         print("No change detected.")
-        print("Grades available:", n-int(list.count("N/A")))
+        print("Grades available:", len(courses)-int(list.count("N/A")))
         print("\n\n")
         return list

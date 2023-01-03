@@ -1,7 +1,16 @@
+# DO NOT use any spaces
+# DO NOT delete any of the variable names
+
+# Information for web scraper
 userid:
 password:
-numberOfCourses(entire year):
-delay(s):
 
-#DO NOT USE SPACES
-#DO NOT DELETE ANY OF THE VARIABLE NAMES.
+# Number of courses for the entire year as seen on the student center.
+numberOfCourses:
+
+# Delay between checks for grade updates.
+delay:
+
+# Indices of courses to be monitored (the first course is indexed as 0) as seen on the student center.
+# Separate indices with commas. Leave blank to get all courses.
+courses:

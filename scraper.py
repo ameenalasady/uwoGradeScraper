@@ -5,12 +5,57 @@ from beautifulSoup import htmlExtractor
 
 
 f = open("info.txt", "r")
+
+for i in range(4):
+    f.readline()
+
 userid = str(f.readline())[7:-1:]
 password = str(f.readline())[9:-1:]
-n = int(str(f.readline())[29::])
-delay = int(str(f.readline())[9::])
+
+for i in range(2):
+    f.readline()
+n = int(str(f.readline())[16::])
+
+for i in range(2):
+    f.readline()
+
+delay = int(str(f.readline())[6::])
+
+for i in range(3):
+    f.readline()
+
+courses = (str(f.readline()))[8::]
+
+if courses == "":
+    courses = []
+    for i in range(n):
+        courses.append(i)
+else:
+
+    courses = courses.split(",")
+    courses = [int(x) for x in courses]
+
+
 f.close()
 
+didCoursesChange = False
+
+os.chdir("cache")
+
+c = open("lastCourses.txt", "r")
+
+
+if str(courses) != str(c.read()):
+    if not ((str(courses) == "" and str(c.read()) == [i for i in range(n)]) or (str(courses) == [i for i in range(n)] and str(c.read()) == "")):
+        c.close()
+        c = open("lastCourses.txt", "w")
+        c.write(str(courses))
+        didCoursesChange = True
+        print("Courses have been changed")
+
+c.close()
+
+os.chdir("..")
 with open("logs.txt", "rb") as file:
     try:
         file.seek(-2, os.SEEK_END)
@@ -49,6 +94,7 @@ while (True):
     except:
         stringData = ""
 
-    currentMarks = htmlExtractor(stringData, n, currentMarks)
+    currentMarks = htmlExtractor(
+        stringData, currentMarks, courses, didCoursesChange)
 
     time.sleep(delay)
