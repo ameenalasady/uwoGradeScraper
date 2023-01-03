@@ -38,6 +38,14 @@ else:
 
 f.close()
 
+if userid == "":
+    userid = input("""It seems like you have left "userid" blank in "info.txt", please update it or enter it now: (the value you enter now will not be saved on your machine)\n""")
+
+if password == "":
+    password = input(
+        """It seems like you have left "password" blank in "info.txt", please update it or enter it now: (the value you enter now will not be saved on your machine)\n""")
+    print("Please wait...")
+
 didCoursesChange = False
 
 os.chdir("cache")
