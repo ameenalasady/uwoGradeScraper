@@ -1,6 +1,7 @@
 import requests
 import time
 import os
+import pwinput
 from beautifulSoup import htmlExtractor
 
 
@@ -39,12 +40,13 @@ else:
 f.close()
 
 if userid == "":
-    userid = input("""It seems like you have left "userid" blank in "info.txt", please update it or enter it now: (the value you enter now will not be saved on your machine)\n""")
+    userid = input("""It seems like you have left "userid" blank in "info.txt".\nPlease update it or enter it now:\n(The value you enter now will not be saved on your machine)\n""")
 
 if password == "":
-    password = input(
-        """It seems like you have left "password" blank in "info.txt", please update it or enter it now: (the value you enter now will not be saved on your machine)\n""")
-    print("Please wait...")
+    print("""\nIt seems like you have left "password" blank in "info.txt".\nPlease update it or enter it now:\n(The value you enter now will not be saved on your machine)\n""")
+    password = pwinput.pwinput(
+        mask="*", prompt="Password:")
+    print("\nPlease wait...\n")
 
 didCoursesChange = False
 

@@ -12,5 +12,5 @@ numberOfCourses:
 delay:
 
 # Indices of courses to be monitored (the first course is indexed as 0) as seen on the student center.
-# Separate indices with commas. Leave blank to get all courses.
+# Separate indices with commas. Leave blank to get all courses. (Remember not to use spaces)
 courses:

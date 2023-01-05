@@ -6,6 +6,7 @@ A program that scrapes a student's grades from the university's student center (
 
 - Scrape grades for any term
 - View grades in the terminal
+- The user can specify which courses they want to track changes for, if not all.
 - Option to receive notifications when grades are updated
   - Discord
   - Windows 10 toast notifications
@@ -19,6 +20,7 @@ Here is a screenshot of what the program looks like:
 
 - beautifulsoup4
 - requests
+- pwinput
 - win10toast (optional, for Windows 10 toast notifications)
 - discord (optional, for Discord notifications)
 - colorama (optional, for colored terminal output)
