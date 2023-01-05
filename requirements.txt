@@ -3,3 +3,4 @@ requests
 win10toast
 discord
 colorama
+pwinput
