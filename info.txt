@@ -4,13 +4,3 @@
 # Information for web scraper
 userid:
 password:
-
-# Number of courses for the entire year as seen on the student center.
-numberOfCourses:
-
-# Delay between checks for grade updates.
-delay:
-
-# Indices of courses to be monitored (the first course is indexed as 0) as seen on the student center.
-# Separate indices with commas. Leave blank to get all courses. (Remember not to use spaces)
-courses:

@@ -5,8 +5,9 @@ A program that scrapes a student's grades from the university's student center (
 ## Features
 
 - Scrape grades for any term
+- The user can specify which courses they want to track changes for from that term, if not all.
+- Have grades saved to a log file
 - View grades in the terminal
-- The user can specify which courses they want to track changes for, if not all.
 - Option to receive notifications when grades are updated
   - Discord
   - Windows 10 toast notifications

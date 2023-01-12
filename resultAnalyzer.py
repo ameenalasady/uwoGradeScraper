@@ -5,7 +5,7 @@ from colorama import Fore
 from colorama import Style
 
 
-def analyzeList(list, titles, currentMarks, courses, didCoursesChange):
+def analyzeList(list, titles, currentMarks, filename, selectedCourses):
 
     colorama_init()
 
@@ -17,9 +17,33 @@ def analyzeList(list, titles, currentMarks, courses, didCoursesChange):
         if "&amp;" in titles[i]:
             titles[i] = titles[i].replace("&amp;", "&")
 
-    f = open("logs.txt", "a")
+    if selectedCourses == []:
+        print("Select which courses you want to track for changes:\n")
+        print("Leave blank to track all courses.")
+        for i in range(len(list)):
+            print(str(i)+" : "+titles[i])
+        temp = input("\nFor example: 0,1,2,4\n")
+        if temp == "":
+            selectedCourses = [i for i in range(len(list))]
+        else:
+            selectedCourses = temp.split(",")
+
+    for i in range(len(selectedCourses)):
+        selectedCourses[i] = int(selectedCourses[i])
+
+    NewList = list
+    NewTitles = titles
+    list = []
+    titles = []
+
+    for i in range(len(selectedCourses)):
+        list.append(NewList[selectedCourses[i]])
+        titles.append(NewTitles[selectedCourses[i]])
+
+    f = open(str(filename)+".txt", "a")
+
     print(datetime.now().strftime("%d/%m/%Y %H:%M:%S"))
-    for i in range(len(courses)):
+    for i in range(len(titles)):
         if list[i] != "N/A":
             print(Fore.GREEN + str(titles[i]) +
                   ' : ' + str(list[i])+Style.RESET_ALL)
@@ -29,17 +53,17 @@ def analyzeList(list, titles, currentMarks, courses, didCoursesChange):
     f.write(str(list))
     f.close()
 
-    if list == ['']*len(courses):
+    if list == ['']*len(titles):
         print("Timeout")
         print("\n\n")
-        return currentMarks
+        return currentMarks, selectedCourses
 
-    if currentMarks == [] or currentMarks == ['']:
-        print("Grades available:", len(courses)-int(list.count("N/A")))
+    if currentMarks == [] or currentMarks == [''] or currentMarks == ['']*len(titles):
+        print("Grades available:", len(titles)-int(list.count("N/A")))
         print("\n\n")
-        return list
+        return list, selectedCourses
 
-    if list != currentMarks and didCoursesChange == False:
+    if list != currentMarks:
 
         action()
 
@@ -57,11 +81,11 @@ def analyzeList(list, titles, currentMarks, courses, didCoursesChange):
                     str(titlesofDifference))
 
         print("Change detected!")
-        print("Grades available:", len(courses)-int(list.count("N/A")))
+        print("Grades available:", len(titles)-int(list.count("N/A")))
         print("\n\n")
-        return list
+        return list, selectedCourses
     else:
         print("No change detected.")
-        print("Grades available:", len(courses)-int(list.count("N/A")))
+        print("Grades available:", len(titles)-int(list.count("N/A")))
         print("\n\n")
-        return list
+        return list, selectedCourses
