@@ -131,7 +131,7 @@ while (True):
         "ptmode": "f",
         "ptlangcd": "ENG",
         "ptinstalledlang": "ENG",
-        "userid": userid,
+        "userid": userid.upper(),
         "pwd": password
     }
 
