@@ -1,5 +1,7 @@
 # Grade Scraper
 
+## IMPORTANT: AS OF APRIL 5TH, THIS TOOL NO LONGER WORKS DUE TO THE INTRODUCTION OF 2FA TO STUDENT CENTER. THIS WILL BE FIXED IN THE FUTURE.
+
 A program that scrapes a student's grades from the university's student center (specific to Western University).
 
 ## Features
