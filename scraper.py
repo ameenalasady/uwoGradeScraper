@@ -1,38 +1,29 @@
-import requests
 import time
 import os
 import pwinput
 import sys
 from datetime import datetime
 from beautifulSoup import htmlExtractor
-from getICSID import getICSID
-from terms import getTerms
+import json
 
-# This is for getting the user's info from info.txt
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
-f = open("info.txt", "r")
+# This is for getting the user's info from info.json
 
-for i in range(4):
-    f.readline()
-
-userid = str(f.readline())[7:-1:].strip()
-password = str(f.readline())[9::].strip()
+with open("info.json", "r") as f:
+    userInfo = json.load(f)
 
 selectedCourses = []
 
-# courses = (str(f.readline()))[8::].strip()
+userid = userInfo["userid"]
 
-# if courses == "":
-#     courses = []
-#     for i in range(n):
-#         courses.append(i)
-# else:
+password = userInfo["password"]
 
-#     courses = courses.split(",")
-#     courses = [int(x) for x in courses]
-
-
-f.close()
+PATH = userInfo["ChromeDriver"]
 
 if userid == "":
     userid = input("""It seems like you have left "userid" blank in "info.txt".\nPlease update it or enter it now:\n(The value you enter now will not be saved on your machine)\nUserID:""")
@@ -42,158 +33,119 @@ if password == "":
     password = pwinput.pwinput(
         mask="*", prompt="Password:")
 
+
 delay = int(input("How often would you like to check for updates? (seconds)\n"))
 
 
-# didCoursesChange = False
+service = Service(PATH)
 
-# studentNumber = input("Enter your student number.\n")
-# year = input("Enter the year of grades\n")
+op = webdriver.ChromeOptions()
+# uncomment this if you want chrome to be hidden.
+# op.add_argument('--headless')
+op.add_argument('--service')
+op.add_argument('--hide-scrollbars')
+op.add_argument('--disable-gpu')
+op.add_argument('--log-level=3')
+driver = webdriver.Chrome(options=op)
+driver.implicitly_wait(10)
 
-# os.chdir("cache")
-
-# c = open("lastCourses.txt", "r")
-
-# lastCourses = str(c.readline()).strip()
-# lastYear = str(c.readline()).strip()
-# c.close()
-
-# if str(lastYear) != str(year) or str(lastYear) == "":
-#     c = open("lastCourses.txt", "w")
-#     c.write(str(courses)+"\n"+str(year))
-#     didCoursesChange = True
-#     print("Courses have been changed")
-
-# if str(courses) != lastCourses and didCoursesChange == False:
-#     if ((str(courses) != "" and lastCourses == [i for i in range(n)]) or (str(courses) == [i for i in range(n)] and lastCourses == "")):
-#         c = open("lastCourses.txt", "w")
-#         c.write(str(courses)+"\n"+str(year))
-#         didCoursesChange = True
-#         print("Courses have been changed")
-
-# c.close()
-
-# os.chdir("..")
-# with open("logs.txt", "rb") as file:
-#     try:
-#         file.seek(-2, os.SEEK_END)
-#         while file.read(1) != b'\n':
-#             file.seek(-2, os.SEEK_CUR)
-#     except:
-#         file.seek(0)
-#     lastline = file.readline().decode()
-
-# currentMarks = lastline[1:-1].replace("'", '').replace(" ", "").split(",")
-
-# if currentMarks == ['']*n or currentMarks == ['']:
-#     currentMarks == []
 
 print("\nStarting program with the following setttings:")
 print("UserID:" + userid)
 print("Password:" + "*"*len(password))
 print("Delay between checks:" + str(delay))
-# print("Courses:" + str(courses))
 
 isTermSelected = False
 
 
-headers = {
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:108.0) Gecko/20100101 Firefox/108.0',
-    'Accept': '*/*',
-    'Accept-Language': 'en-US,en;q=0.5',
-    'Referer': 'https://student.uwo.ca/psc/heprdweb/EMPLOYEE/SA/c/UWO_RECORDS_UP2.WSA_ES_GRADE_LIST.GBL?NavColl=true&ICAGTarget=start',
-    'Origin': 'https://student.uwo.ca',
-    'DNT': '1',
-    'Connection': 'keep-alive',
-    'Sec-Fetch-Dest': 'empty',
-    'Sec-Fetch-Mode': 'no-cors',
-    'Sec-Fetch-Site': 'same-origin',
-    'Pragma': 'no-cache',
-    'Cache-Control': 'no-cache',
-    'Content-Type': 'application/x-www-form-urlencoded'
-}
-
 currentMarks = []
+selectedTerm = 0
+errorCount = 999  # Anything big so that it can run the first time.
 
 os.chdir("logs")
 now = datetime.now()
-filename = filename = now.strftime("%Y-%m-%d_%H-%M-%S")
+filename = now.strftime("%Y-%m-%d_%H-%M-%S")
+
 
 while (True):
-
-    loginURL = "https://student.uwo.ca/psp/heprdweb/?&cmd=login&languageCd=ENG"
-    icsidURL = """https://student.uwo.ca/psc/heprdweb/EMPLOYEE/SA/c/NUI_FRAMEWORK.PT_AGSTARTPAGE_NUI.GBL?CONTEXTIDPARAMS=TEMPLATE_ID:PTPPNAVCOL&scname=WSA_GRADES&PTPPB_GROUPLET_ID=WSA_GRADES&CRefName=WSA_NAVCOLL_2"""
-    GetGradesURL = "https://student.uwo.ca/psc/heprdweb/EMPLOYEE/SA/c/UWO_RECORDS_UP2.WSA_ES_GRADE_LIST.GBL?NavColl=true&ICAGTarget=start"
-    URLChangeYear = "https://student.uwo.ca/psc/heprdweb/EMPLOYEE/SA/c/UWO_RECORDS_UP2.WSA_ES_GRADE_LIST.GBL"
-    formData = {
-        "httpPort2": "",
-        "timezoneOffset": 300,
-        "ptmode": "f",
-        "ptlangcd": "ENG",
-        "ptinstalledlang": "ENG",
-        "userid": userid.upper(),
-        "pwd": password
-    }
-
-    s = requests.Session()
-
     try:
-        print("\n\nLogging in...")
-        response = s.post(loginURL, data=formData)
-        print("\nGetting grades...\n")
-        icsidResponse = s.get(icsidURL)
-        icsid = getICSID(icsidResponse.text)
-        termsResponse = s.get(GetGradesURL)
+        if (errorCount > 5):
+            try:
 
+                driver.get("https://student.uwo.ca/")
+
+                useridField = driver.find_element(By.ID, "userid")
+                passwordField = driver.find_element(By.ID, "pwd")
+
+                useridField.send_keys(userid)
+                passwordField.send_keys(password)
+
+                submitButton = driver.find_element(By.CLASS_NAME, "ps-button")
+                submitButton.click()
+
+                print("\nPlease complete your 2FA.\n")
+
+                while (True):
+
+                    try:
+                        passedYet = WebDriverWait(driver, 60).until(
+                            EC.presence_of_element_located((By.ID, "win0divLPNAVSELECT")))
+                        break
+                    except:
+                        print("2FA failed, trying again.\n")
+                        driver.refresh()
+
+                print("2FA complete.\n")
+
+                driver.find_element(
+                    By.ID, "win0divPTNUI_LAND_REC_GROUPLET$2").click()
+
+                driver.find_element(
+                    By.ID, "win0divPTNUI_LAND_REC_GROUPLET$2").click()
+
+                errorCount = 0
+
+            except:
+                errorCount += 1
+                print(
+                    f"Something went wrong. Error count:{errorCount}. Will reattempt logging in at error count greater than 5.\n")
+        driver.refresh()
+
+        time.sleep(0.3)
+
+        iframeForTerms = driver.find_element(By.ID, "main_target_win0")
+
+        driver.switch_to.frame(iframeForTerms)
+
+        terms = driver.find_elements(By.TAG_NAME, "option")
+
+        terms.pop(0)
         if isTermSelected == False:
 
-            terms = getTerms(termsResponse.text)
+            print("Select which term:\n")
 
-            print("Select which term you want:")
-            print("(For example, type 0)\n")
-            for i in range(len(terms[0])):
-                print(str(i)+" : "+str(terms[0][i]))
-            termSelectedIndex = input("\n")
+            for i in range(len(terms)):
+                print(i, ":", terms[i].text)
 
-            print("Selected " + str(terms[0][int(termSelectedIndex)])+"\n")
-
-            termValue = terms[1][int(termSelectedIndex)]
+            selectedTerm = input("\n")
 
             isTermSelected = True
 
-        changeYearFormData = {
-            "ICAction": "DERIVED_AA2_DERIVED_LINK3",
-            "ICModelCancel": "0",
-            "ICXPos": "0",
-            "ICYPos": "0",
-            "ResponsetoDiffFrame": "-1",
-            "TargetFrameName": "None",
-            "FacetPath": "None",
-            "ICFocus": "",
-            "ICSaveWarningFilter": "0",
-            "ICChanged": "-1",
-            "ICSkipPending": "0",
-            "ICAutoSave": "0",
-            "ICResubmit": "0",
-            "ICSID": str(icsid),
-            "ICAGTarget": "true",
-            "ICActionPrompt": "false",
-            "ICBcDomData": "UnknownValue",
-            "ICPanelHelpUrl": "",
-            "ICPanelName": "",
-            "ICFind": "",
-            "ICAddCount": "",
-            "ICAppClsData": "",
-            "DERIVED_AA3_DERIVED_STERM": str(termValue)
-        }
+        terms[int(selectedTerm)].click()
 
-        data = s.post(URLChangeYear, data=changeYearFormData)
-        stringData = str(data.text)
+        changeLink = driver.find_element(By.ID, "DERIVED_AA2_DERIVED_LINK3")
+        changeLink.click()
+
+        time.sleep(1)
+
+        errorCount = 0
 
     except Exception as e:
         exc_type, exc_obj, exc_tb = sys.exc_info()
         fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-        print("Something went wrong\n")
+        errorCount += 1
+        print(
+            f"Something went wrong. Error count: {errorCount}. Will reattempt logging in at error count greater than 5.\n\n")
         print(exc_type, fname, exc_tb.tb_lineno)
         print(e)
         for remaining in range((delay), 0, -1):
@@ -203,9 +155,11 @@ while (True):
             sys.stdout.flush()
             time.sleep(1)
         continue
-
+    time.sleep(2)
     returnedTuple = htmlExtractor(
-        stringData, currentMarks, filename, selectedCourses)
+        driver.page_source, currentMarks, filename, selectedCourses)
+
+    driver.switch_to.default_content()
 
     currentMarks = returnedTuple[0]
     selectedCourses = returnedTuple[1]
@@ -217,3 +171,6 @@ while (True):
               "seconds.", end="\r")
         sys.stdout.flush()
         time.sleep(1)
+
+    print(' ' * 40, end='\r')
+    print("Trying again in 0 seconds.", end="\r")

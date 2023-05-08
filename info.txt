@@ -1,6 +1,0 @@
-# DO NOT use any spaces
-# DO NOT delete any of the variable names
-
-# Information for web scraper
-userid:
-password:

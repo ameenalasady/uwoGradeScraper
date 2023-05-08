@@ -4,3 +4,5 @@ win10toast
 discord
 colorama
 pwinput
+selenium
+chromedriver-py

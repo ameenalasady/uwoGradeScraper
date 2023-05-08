@@ -10,9 +10,10 @@ def action():
 
 
 # Change this URL
-url = "https://discord.com/api/webhooks/XXXXXXXXXXXXXXXXXXXXXXXX"
+url = "https://discord.com/api/xxxxxxxxxxxxxxxxxxxxxxxxxxx"
 
 
 def sendMessage(message, number, title):
     webhook = SyncWebhook.from_url(url)
-    webhook.send(message + " " + str(number) + " in " + str(title) + "!")
+    webhook.send(message + " " + str(number) +
+                 " in " + str(title) + "!" + " W or L?")
