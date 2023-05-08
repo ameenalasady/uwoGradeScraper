@@ -23,7 +23,7 @@ userid = userInfo["userid"]
 
 password = userInfo["password"]
 
-PATH = userInfo["ChromeDriver"]
+PATH = userInfo["ChromeDriverPath"]
 
 if userid == "":
     userid = input("""It seems like you have left "userid" blank in "info.txt".\nPlease update it or enter it now:\n(The value you enter now will not be saved on your machine)\nUserID:""")
