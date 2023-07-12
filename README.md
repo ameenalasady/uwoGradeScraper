@@ -29,7 +29,7 @@ Here is a screenshot of what the program looks like:
 - discord (optional, for Discord notifications)
 - colorama (optional, for colored terminal output)
 - selenium
-- ChromeDriver
+- ChromeDriver (GeckoDriver also works but requires slight code adjustments)
 
 ## How to Use
 
