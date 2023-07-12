@@ -4,7 +4,7 @@ A program that scrapes a student's grades from the university's student center (
 
 ## Features
 
-- Scrape grades for the any term
+- Scrape grades for any term
 
 - Have grades saved to a log file
 - View grades in the terminal
